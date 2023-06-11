@@ -1,0 +1,29 @@
+services:
+  devcontainer:
+    build:
+      context: ..
+      dockerfile: .devcontainer/dockerfile
+      args:
+        - baseimage=${BASE:-nvidia/cuda:11.7.0-cudnn8-devel-ubuntu22.04}
+        - username=vscode
+        - aptmirror=${APT_MIRROR:-archive.ubuntu.com}
+    volumes:
+      - ..:/workspace
+      - ${DATASET:-dataset}:/workspace/dataset
+      - ${POETRY_VENV:-poetry_venv}:/workspace/.venv
+    command: sleep infinity
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+    user: vscode
+    env_file:
+      - .env
+      - ../.env
+volumes:
+  dataset:
+  poetry_venv:

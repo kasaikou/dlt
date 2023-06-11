@@ -1,0 +1,47 @@
+ARG baseimage
+ARG aptmirror
+ARG python=3.10
+ARG username
+ARG useruid=1000
+ARG usergid=${useruid}
+
+
+FROM ${baseimage} AS core
+
+ARG aptmirror
+RUN sed -i "s@archive.ubuntu.com@${aptmirror}@g" /etc/apt/sources.list && \
+    apt-get update && \
+    DEBIAN_FRONTEND=nointeractive \
+    TZ=UTC \
+    apt-get install -y --no-install-recommends \
+    sudo \
+    tzdata \
+    wget \
+    tar \
+    curl \
+    unzip \
+    software-properties-common
+
+ARG python
+RUN apt-get install -y --no-install-recommends \
+    git \
+    git-lfs \
+    python${python} \
+    imagemagick \
+    build-essential \
+    pkg-config && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python${python} 10 && \
+    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python${python} 10
+
+ARG username
+ARG useruid
+ARG usergid
+
+RUN groupadd --gid ${usergid} ${username} && \
+    useradd -s /bin/bash --uid ${useruid} --gid ${usergid} -m ${username} && \
+    echo ${username} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${username} && \
+    chmod 0440 /etc/sudoers.d/${username}
+
+ARG username
+USER ${username}
+RUN curl -sSL https://install.python-poetry.org | python3 -

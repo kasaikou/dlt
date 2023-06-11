@@ -1,0 +1,7 @@
+{
+    "python.formatting.provider": "black",
+    "autoDocstring.docstringFormat": "numpy",
+    "python.linting.mypyEnabled": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.linting.flake8Enabled": true
+}

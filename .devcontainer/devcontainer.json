@@ -1,0 +1,23 @@
+{
+    "name": "Deep Learning Training",
+    "dockerComposeFile": "compose.yml",
+    "service": "devcontainer",
+    "remoteUser": "vscode",
+    "workspaceFolder": "/workspace",
+    "initializeCommand": "touch .env && touch .devcontainer/.env",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bungcip.better-toml",
+                "ms-python.python",
+                "ms-python.black-formatter",
+                "njpwerner.autodocstring",
+            ],
+            "settings": {
+                "python.formatting.blackPath": "/workspace/.venv/bin/black",
+                "python.linting.mypyPath": "/workspace/.venv/bin/mypy",
+                "python.linting.flake8Path": "/workspace/.venv/bin/flake8"
+            }
+        }
+    }
+}
